@@ -54,7 +54,7 @@ duration_model: duration_test
 duration_train: test
 duration_data: test
 
-acoustic_model: acoustic_melf0_test
+acoustic_model: acoustic_nnsvs_melf0_test
 acoustic_train: test
 acoustic_data: test_melf0
 

@@ -16,9 +16,12 @@ from nnsvs.gen import (
 )
 from nnsvs.logger import getLogger
 from nnsvs.util import extract_static_scaler, init_seed, load_utt_list, load_vocoder
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig, OmegaConf, AnyNode, ListConfig
+from omegaconf.base import ContainerMetadata, Metadata
 from scipy.io import wavfile
 from tqdm.auto import tqdm
+from typing import Any
+from collections import defaultdict
 
 
 @hydra.main(config_path="conf/synthesis", config_name="config")
@@ -31,6 +34,18 @@ def my_app(config: DictConfig) -> None:
         device = torch.device("cpu")
     else:
         device = torch.device(config.device)
+    
+    # TESTING THESE LINES TO PREVENT UNPICKLING ERROR
+    torch.serialization.add_safe_globals([ListConfig])
+    torch.serialization.add_safe_globals([ContainerMetadata])
+    torch.serialization.add_safe_globals([Any])
+    torch.serialization.add_safe_globals([list])
+    torch.serialization.add_safe_globals([defaultdict])
+    torch.serialization.add_safe_globals([dict])
+    torch.serialization.add_safe_globals([int])
+    torch.serialization.add_safe_globals([DictConfig])
+    torch.serialization.add_safe_globals([AnyNode])
+    torch.serialization.add_safe_globals([Metadata])
 
     # timelag
     timelag_config = OmegaConf.load(to_absolute_path(config.timelag.model_yaml))

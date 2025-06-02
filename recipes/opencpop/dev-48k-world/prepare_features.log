@@ -1,0 +1,106 @@
+[2025-05-29 17:19:56,458][nnsvs][INFO] - timelag:
+  enabled: true
+  question_path: null
+  label_phone_score_dir: data/timelag/label_phone_score
+  label_phone_align_dir: data/timelag/label_phone_align
+duration:
+  enabled: true
+  question_path: null
+  label_dir: data/duration/label_phone_align
+acoustic:
+  enabled: true
+  question_path: null
+  wav_dir: data/acoustic/wav
+  label_dir: data/acoustic/label_phone_align
+  sample_rate: 48000
+  feature_type: world
+  res_type: scipy
+  subphone_features: coarse_coding
+  f0_floor: null
+  f0_ceil: null
+  f0_extractor: harvest
+  d4c_threshold: 0.15
+  frame_period: 5
+  mgc_order: 59
+  use_world_codec: true
+  use_mcep_aperiodicity: false
+  mcep_aperiodicity_order: 24
+  num_windows: 1
+  dynamic_features_flags:
+  - false
+  - false
+  - false
+  - false
+  relative_f0: false
+  interp_unvoiced_aperiodicity: true
+  vibrato_mode: none
+  trajectory_smoothing: false
+  trajectory_smoothing_cutoff: 50
+  trajectory_smoothing_f0: true
+  trajectory_smoothing_cutoff_f0: 20
+  correct_vuv: true
+  correct_f0: false
+verbose: 100
+utt_list: data/list/train_no_dev.list
+out_dir: dump/opencpop/org/train_no_dev/
+max_workers: null
+question_path: ../../_common/hed/zh_opencpop.hed
+log_f0_conditioning: true
+
+[2025-05-29 17:19:56,533][nnsvs][INFO] - Timelag linguistic feature dim: 68
+[2025-05-29 17:19:56,533][nnsvs][INFO] - Timelag feature dim: 1
+[2025-05-29 17:20:11,163][nnsvs][INFO] - Duration linguistic feature dim: 68
+[2025-05-29 17:20:11,163][nnsvs][INFO] - Duration feature dim: 1
+[2025-05-29 17:20:16,274][nnsvs][INFO] - Acoustic linguistic feature dim: 72
+[2025-05-29 17:20:18,029][nnsvs][INFO] - Acoustic feature dim: 67
+[2025-05-29 19:22:15,833][nnsvs][INFO] - timelag:
+  enabled: true
+  question_path: null
+  label_phone_score_dir: data/timelag/label_phone_score
+  label_phone_align_dir: data/timelag/label_phone_align
+duration:
+  enabled: true
+  question_path: null
+  label_dir: data/duration/label_phone_align
+acoustic:
+  enabled: true
+  question_path: null
+  wav_dir: data/acoustic/wav
+  label_dir: data/acoustic/label_phone_align
+  sample_rate: 48000
+  feature_type: world
+  res_type: scipy
+  subphone_features: coarse_coding
+  f0_floor: null
+  f0_ceil: null
+  f0_extractor: harvest
+  d4c_threshold: 0.15
+  frame_period: 5
+  mgc_order: 59
+  use_world_codec: true
+  use_mcep_aperiodicity: false
+  mcep_aperiodicity_order: 24
+  num_windows: 1
+  dynamic_features_flags:
+  - false
+  - false
+  - false
+  - false
+  relative_f0: false
+  interp_unvoiced_aperiodicity: true
+  vibrato_mode: none
+  trajectory_smoothing: false
+  trajectory_smoothing_cutoff: 50
+  trajectory_smoothing_f0: true
+  trajectory_smoothing_cutoff_f0: 20
+  correct_vuv: true
+  correct_f0: false
+verbose: 100
+utt_list: data/list/train_no_dev.list
+out_dir: dump/opencpop/org/train_no_dev/
+max_workers: null
+question_path: ../../_common/hed/zh_opencpop.hed
+log_f0_conditioning: true
+
+[2025-05-29 19:22:15,978][nnsvs][INFO] - Timelag linguistic feature dim: 68
+[2025-05-29 19:22:15,978][nnsvs][INFO] - Timelag feature dim: 1

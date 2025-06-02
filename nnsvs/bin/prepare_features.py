@@ -77,7 +77,7 @@ def _prepare_acoustic_feature(
     np.save(pfpath, y_pf, allow_pickle=False)
 
 
-@hydra.main(config_path="conf/prepare_features", config_name="config")
+@hydra.main(config_path="conf/prepare_features", config_name="config", version_base=None)
 def my_app(config: DictConfig) -> None:
     global logger
     logger = getLogger(config.verbose)

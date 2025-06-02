@@ -457,7 +457,7 @@ def train_loop(
     return last_dev_loss
 
 
-@hydra.main(config_path="conf/train_acoustic", config_name="config")
+@hydra.main(config_path="conf/train_acoustic", config_name="config", version_base=None)
 def my_app(config: DictConfig) -> None:
     if "max_time_frames" in config.data and config.data.max_time_frames > 0:
         collate_fn = partial(

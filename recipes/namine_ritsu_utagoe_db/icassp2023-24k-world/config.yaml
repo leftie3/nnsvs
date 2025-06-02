@@ -7,7 +7,7 @@ tag:
 
 ## Directory of Unzipped singing voice database
 # PLEASE CHANGE THE PATH BASED ON YOUR ENVIRONMENT
-db_root: "~/data/「波音リツ」歌声データベースVer2"
+db_root: "~/Documents/「波音リツ」歌声データベースVer2.0.2"
 
 ## Output directory
 # All the generated labels, intermediate files, and segmented wav files
@@ -87,7 +87,7 @@ duration_model: duration_vp_mdn
 duration_train: myconfig
 duration_data: myconfig
 
-acoustic_model: acoustic_nnsvs_ar
+acoustic_model: acoustic_nnsvs_world_multi_ar_mgcf0_prenet0
 acoustic_train: myconfig
 acoustic_data: world
 

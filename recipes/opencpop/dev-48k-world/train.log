@@ -1,0 +1,354 @@
+[2025-05-29 17:31:34,679][nnsvs][INFO] - model:
+  stream_sizes:
+  - 1
+  has_dynamic_features:
+  - false
+  stream_weights:
+  - 1
+  netG:
+    _target_: nnsvs.model.VariancePredictor
+    in_dim: 68
+    out_dim: 1
+    hidden_dim: 256
+    num_layers: 5
+    kernel_size: 5
+    dropout: 0.5
+    use_mdn: true
+    num_gaussians: 4
+    init_type: kaiming_normal
+train:
+  out_dir: exp/opencpop/duration_vp_mdn
+  log_dir: tensorboard/opencpop_duration_vp_mdn
+  use_amp: false
+  use_ddp: false
+  max_train_steps: -1
+  nepochs: 100
+  checkpoint_epoch_interval: 50
+  feats_criterion: mse
+  stream_wise_loss: false
+  use_detect_anomaly: false
+  optim:
+    optimizer:
+      name: Adam
+      params:
+        lr: 0.001
+        betas:
+        - 0.9
+        - 0.999
+        weight_decay: 0.0
+    lr_scheduler:
+      name: StepLR
+      params:
+        step_size: 20
+        gamma: 0.5
+  resume:
+    checkpoint: ''
+    load_optimizer: false
+  cudnn:
+    benchmark: false
+    deterministic: true
+data:
+  train_no_dev:
+    in_dir: dump/opencpop/norm/train_no_dev/in_duration/
+    out_dir: dump/opencpop/norm/train_no_dev/out_duration/
+  dev:
+    in_dir: dump/opencpop/norm/dev/in_duration/
+    out_dir: dump/opencpop/norm/dev/out_duration/
+  num_workers: 2
+  batch_size: 8
+  pin_memory: true
+  batch_max_frames: -1
+  allow_cache: true
+  filter_long_segments: false
+  filter_num_frames: 6000
+  filter_min_num_frames: 0
+  max_time_frames: -1
+  in_scaler_path: dump/opencpop/norm/in_duration_scaler.joblib
+  out_scaler_path: dump/opencpop/norm/out_duration_scaler.joblib
+mlflow:
+  enabled: false
+  experiment: test
+verbose: 100
+seed: 773
+data_parallel: false
+
+[2025-05-29 17:31:34,679][nnsvs][INFO] - PyTorch version: 2.7.0+cu126
+[2025-05-29 17:31:34,680][nnsvs][INFO] - cudnn.deterministic: True
+[2025-05-29 17:31:34,680][nnsvs][INFO] - cudnn.benchmark: False
+[2025-05-29 17:31:34,680][nnsvs][INFO] - cuDNN version: 90501
+[2025-05-29 17:31:34,680][nnsvs][INFO] - Random seed: 773
+[2025-05-29 17:31:34,775][nnsvs][INFO] - VariancePredictor(
+  (conv): Sequential(
+    (0): Sequential(
+      (0): Conv1d(68, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+      (1): ReLU()
+      (2): LayerNorm((256,), eps=1e-12, elementwise_affine=True)
+      (3): Dropout(p=0.5, inplace=False)
+    )
+    (1): Sequential(
+      (0): Conv1d(256, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+      (1): ReLU()
+      (2): LayerNorm((256,), eps=1e-12, elementwise_affine=True)
+      (3): Dropout(p=0.5, inplace=False)
+    )
+    (2): Sequential(
+      (0): Conv1d(256, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+      (1): ReLU()
+      (2): LayerNorm((256,), eps=1e-12, elementwise_affine=True)
+      (3): Dropout(p=0.5, inplace=False)
+    )
+    (3): Sequential(
+      (0): Conv1d(256, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+      (1): ReLU()
+      (2): LayerNorm((256,), eps=1e-12, elementwise_affine=True)
+      (3): Dropout(p=0.5, inplace=False)
+    )
+    (4): Sequential(
+      (0): Conv1d(256, 256, kernel_size=(5,), stride=(1,), padding=(2,))
+      (1): ReLU()
+      (2): LayerNorm((256,), eps=1e-12, elementwise_affine=True)
+      (3): Dropout(p=0.5, inplace=False)
+    )
+  )
+  (mdn_layer): MDNLayer(
+    (log_pi): Linear(in_features=256, out_features=4, bias=True)
+    (log_sigma): Linear(in_features=256, out_features=4, bias=True)
+    (mu): Linear(in_features=256, out_features=4, bias=True)
+  )
+)
+[2025-05-29 17:31:34,775][nnsvs][INFO] - Number of trainable params: 1.405 million
+[2025-05-29 17:31:35,402][nnsvs][DEBUG] - Fixed batch size: 8
+[2025-05-29 17:31:35,436][nnsvs][DEBUG] - Fixed batch size: 8
+[2025-05-29 17:31:35,450][nnsvs][INFO] - Number of iterations per epoch: 444
+[2025-05-29 17:31:35,450][nnsvs][INFO] - Number of max_train_steps is set based on nepochs: 44400
+[2025-05-29 17:31:35,450][nnsvs][INFO] - Number of epochs: 100
+[2025-05-29 17:31:35,450][nnsvs][INFO] - Number of iterations: 44400
+[2025-05-29 17:31:37,002][nnsvs][INFO] - [train_no_dev] [Epoch 1]: loss 1.1651831898871843
+[2025-05-29 17:31:37,125][nnsvs][INFO] - [dev] [Epoch 1]: loss 0.540619107393118
+[2025-05-29 17:31:37,139][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:38,374][nnsvs][INFO] - [train_no_dev] [Epoch 2]: loss 0.5115887732119173
+[2025-05-29 17:31:38,481][nnsvs][INFO] - [dev] [Epoch 2]: loss 0.1577606259334761
+[2025-05-29 17:31:38,497][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:39,708][nnsvs][INFO] - [train_no_dev] [Epoch 3]: loss 0.2938811659552304
+[2025-05-29 17:31:39,828][nnsvs][INFO] - [dev] [Epoch 3]: loss 0.08314410428283736
+[2025-05-29 17:31:39,845][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:41,089][nnsvs][INFO] - [train_no_dev] [Epoch 4]: loss 0.12831124147690773
+[2025-05-29 17:31:41,197][nnsvs][INFO] - [dev] [Epoch 4]: loss -0.16295267935269153
+[2025-05-29 17:31:41,214][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:42,458][nnsvs][INFO] - [train_no_dev] [Epoch 5]: loss 0.0018857085737394514
+[2025-05-29 17:31:42,573][nnsvs][INFO] - [dev] [Epoch 5]: loss -0.2868365760749349
+[2025-05-29 17:31:42,590][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:43,769][nnsvs][INFO] - [train_no_dev] [Epoch 6]: loss -0.08964762706854926
+[2025-05-29 17:31:43,882][nnsvs][INFO] - [dev] [Epoch 6]: loss -0.3660574737363137
+[2025-05-29 17:31:43,898][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:45,077][nnsvs][INFO] - [train_no_dev] [Epoch 7]: loss -0.1663870211207698
+[2025-05-29 17:31:45,195][nnsvs][INFO] - [dev] [Epoch 7]: loss -0.43308420565265876
+[2025-05-29 17:31:45,212][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:46,410][nnsvs][INFO] - [train_no_dev] [Epoch 8]: loss -0.214961385881415
+[2025-05-29 17:31:46,525][nnsvs][INFO] - [dev] [Epoch 8]: loss -0.474075261503458
+[2025-05-29 17:31:46,542][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:47,781][nnsvs][INFO] - [train_no_dev] [Epoch 9]: loss -0.2577688357350207
+[2025-05-29 17:31:47,898][nnsvs][INFO] - [dev] [Epoch 9]: loss -0.5406895062098136
+[2025-05-29 17:31:47,915][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:49,137][nnsvs][INFO] - [train_no_dev] [Epoch 10]: loss -0.2903313349349307
+[2025-05-29 17:31:49,261][nnsvs][INFO] - [dev] [Epoch 10]: loss -0.45509714776506793
+[2025-05-29 17:31:50,493][nnsvs][INFO] - [train_no_dev] [Epoch 11]: loss -0.31784456322464655
+[2025-05-29 17:31:50,604][nnsvs][INFO] - [dev] [Epoch 11]: loss -0.5336453301402239
+[2025-05-29 17:31:51,831][nnsvs][INFO] - [train_no_dev] [Epoch 12]: loss -0.339164460942082
+[2025-05-29 17:31:51,954][nnsvs][INFO] - [dev] [Epoch 12]: loss -0.5630486326721998
+[2025-05-29 17:31:51,970][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:53,210][nnsvs][INFO] - [train_no_dev] [Epoch 13]: loss -0.36355819021611735
+[2025-05-29 17:31:53,323][nnsvs][INFO] - [dev] [Epoch 13]: loss -0.59995887027337
+[2025-05-29 17:31:53,341][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:54,537][nnsvs][INFO] - [train_no_dev] [Epoch 14]: loss -0.37978345617182085
+[2025-05-29 17:31:54,661][nnsvs][INFO] - [dev] [Epoch 14]: loss -0.4717006671887178
+[2025-05-29 17:31:55,854][nnsvs][INFO] - [train_no_dev] [Epoch 15]: loss -0.3951882678629445
+[2025-05-29 17:31:55,970][nnsvs][INFO] - [dev] [Epoch 15]: loss -0.6544294884571662
+[2025-05-29 17:31:55,987][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:31:57,214][nnsvs][INFO] - [train_no_dev] [Epoch 16]: loss -0.40749395410698075
+[2025-05-29 17:31:57,333][nnsvs][INFO] - [dev] [Epoch 16]: loss -0.6507923924005948
+[2025-05-29 17:31:58,575][nnsvs][INFO] - [train_no_dev] [Epoch 17]: loss -0.42264651417363064
+[2025-05-29 17:31:58,689][nnsvs][INFO] - [dev] [Epoch 17]: loss -0.5739767092924851
+[2025-05-29 17:31:59,915][nnsvs][INFO] - [train_no_dev] [Epoch 18]: loss -0.43702852818275895
+[2025-05-29 17:32:00,036][nnsvs][INFO] - [dev] [Epoch 18]: loss -0.6780246438888403
+[2025-05-29 17:32:00,053][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:01,301][nnsvs][INFO] - [train_no_dev] [Epoch 19]: loss -0.4491835628250228
+[2025-05-29 17:32:01,418][nnsvs][INFO] - [dev] [Epoch 19]: loss -0.6481075470264142
+[2025-05-29 17:32:02,638][nnsvs][INFO] - [train_no_dev] [Epoch 20]: loss -0.4530765950881146
+[2025-05-29 17:32:02,749][nnsvs][INFO] - [dev] [Epoch 20]: loss -0.7039909935914553
+[2025-05-29 17:32:02,766][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:03,972][nnsvs][INFO] - [train_no_dev] [Epoch 21]: loss -0.4955667629502378
+[2025-05-29 17:32:04,085][nnsvs][INFO] - [dev] [Epoch 21]: loss -0.726447059557988
+[2025-05-29 17:32:04,102][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:05,334][nnsvs][INFO] - [train_no_dev] [Epoch 22]: loss -0.5140390544794164
+[2025-05-29 17:32:05,459][nnsvs][INFO] - [dev] [Epoch 22]: loss -0.7278588780990014
+[2025-05-29 17:32:05,475][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:06,695][nnsvs][INFO] - [train_no_dev] [Epoch 23]: loss -0.5219626769356362
+[2025-05-29 17:32:06,811][nnsvs][INFO] - [dev] [Epoch 23]: loss -0.7169657429823508
+[2025-05-29 17:32:08,016][nnsvs][INFO] - [train_no_dev] [Epoch 24]: loss -0.5291874647006258
+[2025-05-29 17:32:08,128][nnsvs][INFO] - [dev] [Epoch 24]: loss -0.7146852497871106
+[2025-05-29 17:32:09,363][nnsvs][INFO] - [train_no_dev] [Epoch 25]: loss -0.5361585088560844
+[2025-05-29 17:32:09,482][nnsvs][INFO] - [dev] [Epoch 25]: loss -0.7560028032614634
+[2025-05-29 17:32:09,499][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:10,737][nnsvs][INFO] - [train_no_dev] [Epoch 26]: loss -0.5477643247593094
+[2025-05-29 17:32:10,858][nnsvs][INFO] - [dev] [Epoch 26]: loss -0.7291574982496408
+[2025-05-29 17:32:12,065][nnsvs][INFO] - [train_no_dev] [Epoch 27]: loss -0.5504870772496
+[2025-05-29 17:32:12,185][nnsvs][INFO] - [dev] [Epoch 27]: loss -0.7750351658234229
+[2025-05-29 17:32:12,201][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:13,396][nnsvs][INFO] - [train_no_dev] [Epoch 28]: loss -0.5550982710813079
+[2025-05-29 17:32:13,518][nnsvs][INFO] - [dev] [Epoch 28]: loss -0.7148385861745248
+[2025-05-29 17:32:14,719][nnsvs][INFO] - [train_no_dev] [Epoch 29]: loss -0.5629156553731846
+[2025-05-29 17:32:14,834][nnsvs][INFO] - [dev] [Epoch 29]: loss -0.7324723096994253
+[2025-05-29 17:32:16,043][nnsvs][INFO] - [train_no_dev] [Epoch 30]: loss -0.5638054005197577
+[2025-05-29 17:32:16,150][nnsvs][INFO] - [dev] [Epoch 30]: loss -0.7370777680323675
+[2025-05-29 17:32:17,352][nnsvs][INFO] - [train_no_dev] [Epoch 31]: loss -0.5738100226263743
+[2025-05-29 17:32:17,465][nnsvs][INFO] - [dev] [Epoch 31]: loss -0.7737111128293551
+[2025-05-29 17:32:18,670][nnsvs][INFO] - [train_no_dev] [Epoch 32]: loss -0.5778580481136167
+[2025-05-29 17:32:18,784][nnsvs][INFO] - [dev] [Epoch 32]: loss -0.754274348799999
+[2025-05-29 17:32:19,981][nnsvs][INFO] - [train_no_dev] [Epoch 33]: loss -0.5847131303838782
+[2025-05-29 17:32:20,109][nnsvs][INFO] - [dev] [Epoch 33]: loss -0.7379104219950162
+[2025-05-29 17:32:21,288][nnsvs][INFO] - [train_no_dev] [Epoch 34]: loss -0.5900935819624243
+[2025-05-29 17:32:21,402][nnsvs][INFO] - [dev] [Epoch 34]: loss -0.7856081483455805
+[2025-05-29 17:32:21,419][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:22,656][nnsvs][INFO] - [train_no_dev] [Epoch 35]: loss -0.5941361473487304
+[2025-05-29 17:32:22,766][nnsvs][INFO] - [dev] [Epoch 35]: loss -0.7857728199316905
+[2025-05-29 17:32:22,783][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:23,977][nnsvs][INFO] - [train_no_dev] [Epoch 36]: loss -0.5979523659423664
+[2025-05-29 17:32:24,092][nnsvs][INFO] - [dev] [Epoch 36]: loss -0.7416345202005826
+[2025-05-29 17:32:25,317][nnsvs][INFO] - [train_no_dev] [Epoch 37]: loss -0.6041944789456891
+[2025-05-29 17:32:25,448][nnsvs][INFO] - [dev] [Epoch 37]: loss -0.7756398790157758
+[2025-05-29 17:32:26,651][nnsvs][INFO] - [train_no_dev] [Epoch 38]: loss -0.6078451209374376
+[2025-05-29 17:32:26,776][nnsvs][INFO] - [dev] [Epoch 38]: loss -0.7868356681787051
+[2025-05-29 17:32:26,794][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:27,983][nnsvs][INFO] - [train_no_dev] [Epoch 39]: loss -0.6116956101881491
+[2025-05-29 17:32:28,102][nnsvs][INFO] - [dev] [Epoch 39]: loss -0.7119553410089933
+[2025-05-29 17:32:29,342][nnsvs][INFO] - [train_no_dev] [Epoch 40]: loss -0.6197066821896278
+[2025-05-29 17:32:29,461][nnsvs][INFO] - [dev] [Epoch 40]: loss -0.7793929668573233
+[2025-05-29 17:32:30,660][nnsvs][INFO] - [train_no_dev] [Epoch 41]: loss -0.6360742887398144
+[2025-05-29 17:32:30,775][nnsvs][INFO] - [dev] [Epoch 41]: loss -0.7901349927370365
+[2025-05-29 17:32:30,791][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:32,003][nnsvs][INFO] - [train_no_dev] [Epoch 42]: loss -0.6459973927687954
+[2025-05-29 17:32:32,123][nnsvs][INFO] - [dev] [Epoch 42]: loss -0.7413280216547159
+[2025-05-29 17:32:33,344][nnsvs][INFO] - [train_no_dev] [Epoch 43]: loss -0.6555538739304285
+[2025-05-29 17:32:33,457][nnsvs][INFO] - [dev] [Epoch 43]: loss -0.8005335113176932
+[2025-05-29 17:32:33,474][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:34,683][nnsvs][INFO] - [train_no_dev] [Epoch 44]: loss -0.6570030070908435
+[2025-05-29 17:32:34,798][nnsvs][INFO] - [dev] [Epoch 44]: loss -0.7750452401546332
+[2025-05-29 17:32:36,021][nnsvs][INFO] - [train_no_dev] [Epoch 45]: loss -0.6585423861135233
+[2025-05-29 17:32:36,143][nnsvs][INFO] - [dev] [Epoch 45]: loss -0.8195060548874048
+[2025-05-29 17:32:36,159][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:32:37,368][nnsvs][INFO] - [train_no_dev] [Epoch 46]: loss -0.6642686917975142
+[2025-05-29 17:32:37,485][nnsvs][INFO] - [dev] [Epoch 46]: loss -0.7710044670563477
+[2025-05-29 17:32:38,679][nnsvs][INFO] - [train_no_dev] [Epoch 47]: loss -0.6659536266716214
+[2025-05-29 17:32:38,799][nnsvs][INFO] - [dev] [Epoch 47]: loss -0.7490166975901678
+[2025-05-29 17:32:40,004][nnsvs][INFO] - [train_no_dev] [Epoch 48]: loss -0.665167660326571
+[2025-05-29 17:32:40,124][nnsvs][INFO] - [dev] [Epoch 48]: loss -0.8134524352275408
+[2025-05-29 17:32:41,336][nnsvs][INFO] - [train_no_dev] [Epoch 49]: loss -0.6680126357320193
+[2025-05-29 17:32:41,458][nnsvs][INFO] - [dev] [Epoch 49]: loss -0.7804257800945869
+[2025-05-29 17:32:42,659][nnsvs][INFO] - [train_no_dev] [Epoch 50]: loss -0.6714831722212268
+[2025-05-29 17:32:42,784][nnsvs][INFO] - [dev] [Epoch 50]: loss -0.7587592487151806
+[2025-05-29 17:32:42,797][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/epoch0050.pth
+[2025-05-29 17:32:44,033][nnsvs][INFO] - [train_no_dev] [Epoch 51]: loss -0.6729827820919119
+[2025-05-29 17:32:44,156][nnsvs][INFO] - [dev] [Epoch 51]: loss -0.8033647250670654
+[2025-05-29 17:32:45,384][nnsvs][INFO] - [train_no_dev] [Epoch 52]: loss -0.6816614393715386
+[2025-05-29 17:32:45,519][nnsvs][INFO] - [dev] [Epoch 52]: loss -0.7980782045767858
+[2025-05-29 17:32:46,705][nnsvs][INFO] - [train_no_dev] [Epoch 53]: loss -0.681795669837041
+[2025-05-29 17:32:46,816][nnsvs][INFO] - [dev] [Epoch 53]: loss -0.7814175773125428
+[2025-05-29 17:32:48,037][nnsvs][INFO] - [train_no_dev] [Epoch 54]: loss -0.6822233381303581
+[2025-05-29 17:32:48,154][nnsvs][INFO] - [dev] [Epoch 54]: loss -0.8009371814819483
+[2025-05-29 17:32:49,350][nnsvs][INFO] - [train_no_dev] [Epoch 55]: loss -0.6902693925542874
+[2025-05-29 17:32:49,467][nnsvs][INFO] - [dev] [Epoch 55]: loss -0.8038798891581022
+[2025-05-29 17:32:50,704][nnsvs][INFO] - [train_no_dev] [Epoch 56]: loss -0.6882719895257069
+[2025-05-29 17:32:50,820][nnsvs][INFO] - [dev] [Epoch 56]: loss -0.7871921268793253
+[2025-05-29 17:32:52,030][nnsvs][INFO] - [train_no_dev] [Epoch 57]: loss -0.6894379336017746
+[2025-05-29 17:32:52,145][nnsvs][INFO] - [dev] [Epoch 57]: loss -0.796243972503222
+[2025-05-29 17:32:53,340][nnsvs][INFO] - [train_no_dev] [Epoch 58]: loss -0.6931237637459695
+[2025-05-29 17:32:53,458][nnsvs][INFO] - [dev] [Epoch 58]: loss -0.7517095666665298
+[2025-05-29 17:32:54,665][nnsvs][INFO] - [train_no_dev] [Epoch 59]: loss -0.6966123776929872
+[2025-05-29 17:32:54,780][nnsvs][INFO] - [dev] [Epoch 59]: loss -0.7760336960737522
+[2025-05-29 17:32:55,998][nnsvs][INFO] - [train_no_dev] [Epoch 60]: loss -0.6969936502140921
+[2025-05-29 17:32:56,113][nnsvs][INFO] - [dev] [Epoch 60]: loss -0.8100025298503729
+[2025-05-29 17:32:57,311][nnsvs][INFO] - [train_no_dev] [Epoch 61]: loss -0.7083699992513871
+[2025-05-29 17:32:57,425][nnsvs][INFO] - [dev] [Epoch 61]: loss -0.7993687597604898
+[2025-05-29 17:32:58,657][nnsvs][INFO] - [train_no_dev] [Epoch 62]: loss -0.7128776434708286
+[2025-05-29 17:32:58,775][nnsvs][INFO] - [dev] [Epoch 62]: loss -0.7890585695321743
+[2025-05-29 17:33:00,013][nnsvs][INFO] - [train_no_dev] [Epoch 63]: loss -0.7150469833129162
+[2025-05-29 17:33:00,132][nnsvs][INFO] - [dev] [Epoch 63]: loss -0.7878562475626285
+[2025-05-29 17:33:01,362][nnsvs][INFO] - [train_no_dev] [Epoch 64]: loss -0.713975729504684
+[2025-05-29 17:33:01,483][nnsvs][INFO] - [dev] [Epoch 64]: loss -0.7813885406805918
+[2025-05-29 17:33:02,690][nnsvs][INFO] - [train_no_dev] [Epoch 65]: loss -0.7197667867750734
+[2025-05-29 17:33:02,814][nnsvs][INFO] - [dev] [Epoch 65]: loss -0.7894141146769891
+[2025-05-29 17:33:04,047][nnsvs][INFO] - [train_no_dev] [Epoch 66]: loss -0.7186784387171805
+[2025-05-29 17:33:04,158][nnsvs][INFO] - [dev] [Epoch 66]: loss -0.810377510694357
+[2025-05-29 17:33:05,385][nnsvs][INFO] - [train_no_dev] [Epoch 67]: loss -0.7215177618168496
+[2025-05-29 17:33:05,500][nnsvs][INFO] - [dev] [Epoch 67]: loss -0.7692295358731196
+[2025-05-29 17:33:06,691][nnsvs][INFO] - [train_no_dev] [Epoch 68]: loss -0.7279851378889771
+[2025-05-29 17:33:06,815][nnsvs][INFO] - [dev] [Epoch 68]: loss -0.8085240182968286
+[2025-05-29 17:33:08,057][nnsvs][INFO] - [train_no_dev] [Epoch 69]: loss -0.7232563971533431
+[2025-05-29 17:33:08,171][nnsvs][INFO] - [dev] [Epoch 69]: loss -0.7906316599020591
+[2025-05-29 17:33:09,397][nnsvs][INFO] - [train_no_dev] [Epoch 70]: loss -0.7262011778515738
+[2025-05-29 17:33:09,525][nnsvs][INFO] - [dev] [Epoch 70]: loss -0.8185125520596137
+[2025-05-29 17:33:10,768][nnsvs][INFO] - [train_no_dev] [Epoch 71]: loss -0.7315384223385974
+[2025-05-29 17:33:10,887][nnsvs][INFO] - [dev] [Epoch 71]: loss -0.8093466540941825
+[2025-05-29 17:33:12,094][nnsvs][INFO] - [train_no_dev] [Epoch 72]: loss -0.7337559240761103
+[2025-05-29 17:33:12,206][nnsvs][INFO] - [dev] [Epoch 72]: loss -0.7718941706877488
+[2025-05-29 17:33:13,412][nnsvs][INFO] - [train_no_dev] [Epoch 73]: loss -0.7313120708809243
+[2025-05-29 17:33:13,531][nnsvs][INFO] - [dev] [Epoch 73]: loss -0.8016038170227637
+[2025-05-29 17:33:14,779][nnsvs][INFO] - [train_no_dev] [Epoch 74]: loss -0.7337879151911348
+[2025-05-29 17:33:14,899][nnsvs][INFO] - [dev] [Epoch 74]: loss -0.8099454515255414
+[2025-05-29 17:33:16,119][nnsvs][INFO] - [train_no_dev] [Epoch 75]: loss -0.7334113110964363
+[2025-05-29 17:33:16,231][nnsvs][INFO] - [dev] [Epoch 75]: loss -0.7841089986837827
+[2025-05-29 17:33:17,419][nnsvs][INFO] - [train_no_dev] [Epoch 76]: loss -0.731411029760902
+[2025-05-29 17:33:17,533][nnsvs][INFO] - [dev] [Epoch 76]: loss -0.7899796859576151
+[2025-05-29 17:33:18,768][nnsvs][INFO] - [train_no_dev] [Epoch 77]: loss -0.7395068315772323
+[2025-05-29 17:33:18,876][nnsvs][INFO] - [dev] [Epoch 77]: loss -0.8057112521850146
+[2025-05-29 17:33:20,081][nnsvs][INFO] - [train_no_dev] [Epoch 78]: loss -0.7383784911519772
+[2025-05-29 17:33:20,200][nnsvs][INFO] - [dev] [Epoch 78]: loss -0.7913103837233323
+[2025-05-29 17:33:21,448][nnsvs][INFO] - [train_no_dev] [Epoch 79]: loss -0.7391333955231013
+[2025-05-29 17:33:21,561][nnsvs][INFO] - [dev] [Epoch 79]: loss -0.8139183888068566
+[2025-05-29 17:33:22,792][nnsvs][INFO] - [train_no_dev] [Epoch 80]: loss -0.736525721445277
+[2025-05-29 17:33:22,921][nnsvs][INFO] - [dev] [Epoch 80]: loss -0.7664524866984441
+[2025-05-29 17:33:24,191][nnsvs][INFO] - [train_no_dev] [Epoch 81]: loss -0.7452177101964349
+[2025-05-29 17:33:24,311][nnsvs][INFO] - [dev] [Epoch 81]: loss -0.8105788483069494
+[2025-05-29 17:33:25,549][nnsvs][INFO] - [train_no_dev] [Epoch 82]: loss -0.745815309251214
+[2025-05-29 17:33:25,661][nnsvs][INFO] - [dev] [Epoch 82]: loss -0.8091058971790167
+[2025-05-29 17:33:26,881][nnsvs][INFO] - [train_no_dev] [Epoch 83]: loss -0.7467982526029553
+[2025-05-29 17:33:26,995][nnsvs][INFO] - [dev] [Epoch 83]: loss -0.8089879269783313
+[2025-05-29 17:33:28,217][nnsvs][INFO] - [train_no_dev] [Epoch 84]: loss -0.7473338183250513
+[2025-05-29 17:33:28,343][nnsvs][INFO] - [dev] [Epoch 84]: loss -0.8162868618965149
+[2025-05-29 17:33:29,582][nnsvs][INFO] - [train_no_dev] [Epoch 85]: loss -0.7481200986013219
+[2025-05-29 17:33:29,702][nnsvs][INFO] - [dev] [Epoch 85]: loss -0.8077177233420886
+[2025-05-29 17:33:30,918][nnsvs][INFO] - [train_no_dev] [Epoch 86]: loss -0.748882404922902
+[2025-05-29 17:33:31,028][nnsvs][INFO] - [dev] [Epoch 86]: loss -0.7966544330120087
+[2025-05-29 17:33:32,270][nnsvs][INFO] - [train_no_dev] [Epoch 87]: loss -0.7473112818625596
+[2025-05-29 17:33:32,385][nnsvs][INFO] - [dev] [Epoch 87]: loss -0.806903349665495
+[2025-05-29 17:33:33,595][nnsvs][INFO] - [train_no_dev] [Epoch 88]: loss -0.7514463026110116
+[2025-05-29 17:33:33,718][nnsvs][INFO] - [dev] [Epoch 88]: loss -0.7979515573153129
+[2025-05-29 17:33:34,987][nnsvs][INFO] - [train_no_dev] [Epoch 89]: loss -0.7560471046615291
+[2025-05-29 17:33:35,098][nnsvs][INFO] - [dev] [Epoch 89]: loss -0.8126078076087512
+[2025-05-29 17:33:36,320][nnsvs][INFO] - [train_no_dev] [Epoch 90]: loss -0.749693713880874
+[2025-05-29 17:33:36,437][nnsvs][INFO] - [dev] [Epoch 90]: loss -0.8163308329307116
+[2025-05-29 17:33:37,644][nnsvs][INFO] - [train_no_dev] [Epoch 91]: loss -0.7538566093992543
+[2025-05-29 17:33:37,761][nnsvs][INFO] - [dev] [Epoch 91]: loss -0.7998068825556681
+[2025-05-29 17:33:38,983][nnsvs][INFO] - [train_no_dev] [Epoch 92]: loss -0.7532677551781809
+[2025-05-29 17:33:39,103][nnsvs][INFO] - [dev] [Epoch 92]: loss -0.8183799386024475
+[2025-05-29 17:33:40,329][nnsvs][INFO] - [train_no_dev] [Epoch 93]: loss -0.7517719445330603
+[2025-05-29 17:33:40,457][nnsvs][INFO] - [dev] [Epoch 93]: loss -0.8103640698469602
+[2025-05-29 17:33:41,634][nnsvs][INFO] - [train_no_dev] [Epoch 94]: loss -0.7550498876754228
+[2025-05-29 17:33:41,747][nnsvs][INFO] - [dev] [Epoch 94]: loss -0.8014147614057248
+[2025-05-29 17:33:42,962][nnsvs][INFO] - [train_no_dev] [Epoch 95]: loss -0.7536963225753458
+[2025-05-29 17:33:43,080][nnsvs][INFO] - [dev] [Epoch 95]: loss -0.8121712196331757
+[2025-05-29 17:33:44,279][nnsvs][INFO] - [train_no_dev] [Epoch 96]: loss -0.7584189884028993
+[2025-05-29 17:33:44,396][nnsvs][INFO] - [dev] [Epoch 96]: loss -0.8055202766106679
+[2025-05-29 17:33:45,610][nnsvs][INFO] - [train_no_dev] [Epoch 97]: loss -0.7585103323867729
+[2025-05-29 17:33:45,726][nnsvs][INFO] - [dev] [Epoch 97]: loss -0.7931741647995435
+[2025-05-29 17:33:46,941][nnsvs][INFO] - [train_no_dev] [Epoch 98]: loss -0.7600951737111753
+[2025-05-29 17:33:47,069][nnsvs][INFO] - [dev] [Epoch 98]: loss -0.8022361649916723
+[2025-05-29 17:33:48,282][nnsvs][INFO] - [train_no_dev] [Epoch 99]: loss -0.7565731049792187
+[2025-05-29 17:33:48,407][nnsvs][INFO] - [dev] [Epoch 99]: loss -0.8252021097219907
+[2025-05-29 17:33:48,423][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/best_loss.pth
+[2025-05-29 17:33:49,629][nnsvs][INFO] - [train_no_dev] [Epoch 100]: loss -0.7604756477448318
+[2025-05-29 17:33:49,752][nnsvs][INFO] - [dev] [Epoch 100]: loss -0.8033562038953488
+[2025-05-29 17:33:49,765][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/epoch0100.pth
+[2025-05-29 17:33:49,789][nnsvs][INFO] - Saved checkpoint at /home/ilias/Documents/nnsvs/recipes/opencpop/dev-48k-world/exp/opencpop/duration_vp_mdn/epoch0100.pth
+[2025-05-29 17:33:49,798][nnsvs][INFO] - The best loss was -0.8252021097219907
