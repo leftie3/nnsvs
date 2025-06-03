@@ -1,0 +1,49 @@
+[2025-06-03 13:53:52,838][nnsvs][INFO] - timelag:
+  enabled: true
+  question_path: null
+  label_phone_score_dir: data/timelag/label_phone_score
+  label_phone_align_dir: data/timelag/label_phone_align
+duration:
+  enabled: true
+  question_path: null
+  label_dir: data/duration/label_phone_align
+acoustic:
+  enabled: true
+  question_path: null
+  wav_dir: data/acoustic/wav
+  label_dir: data/acoustic/label_phone_align
+  sample_rate: 48000
+  feature_type: world
+  res_type: scipy
+  subphone_features: coarse_coding
+  f0_floor: null
+  f0_ceil: null
+  f0_extractor: harvest
+  d4c_threshold: 0.15
+  frame_period: 5
+  mgc_order: 59
+  use_world_codec: true
+  use_mcep_aperiodicity: false
+  mcep_aperiodicity_order: 24
+  num_windows: 1
+  dynamic_features_flags:
+  - false
+  - false
+  - false
+  - false
+  relative_f0: false
+  interp_unvoiced_aperiodicity: true
+  vibrato_mode: none
+  trajectory_smoothing: false
+  trajectory_smoothing_cutoff: 50
+  trajectory_smoothing_f0: true
+  trajectory_smoothing_cutoff_f0: 20
+  correct_vuv: true
+  correct_f0: false
+verbose: 100
+utt_list: data/list/train_no_dev.list
+out_dir: dump/yoko/org/train_no_dev/
+max_workers: null
+question_path: ../../_common/hed/jp_dev_latest.hed
+log_f0_conditioning: true
+
