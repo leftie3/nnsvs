@@ -13,6 +13,7 @@ if len(sys.argv) != 2:
     print(f"USAGE: {sys.argv[0]} config_path")
     sys.exit(-1)
 
+# load config
 config = None
 with open(sys.argv[1], "r") as yml:
     config = yaml.load(yml, Loader=yaml.FullLoader)
@@ -20,14 +21,17 @@ if config is None:
     print(f"Cannot read config file: {sys.argv[1]}.")
     sys.exit(-1)
 
+# generate full/mono labels by sinsy
 sinsy = pysinsy.sinsy.Sinsy()
 
+# Only Japanese is supported currently
 assert sinsy.setLanguages("j", config["sinsy_dic"])
 
-# generate full/mono labels by sinsy
 print("Convert musicxml to label files.")
 files = sorted(glob(join(expanduser(config["db_root"]), "**/*.*xml"), recursive=True))
+# For each xml file inside db_root
 for path in tqdm(files):
+    # Skip excluded songs
     name = splitext(basename(path))[0]
     if name in config["exclude_songs"]:
         continue

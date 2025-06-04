@@ -1,6 +1,6 @@
 ### General settings.
 ## The name of singer
-spk: "EN-Tenor-1"
+spk: "JA-Soprano-1"
 
 ## exp tag(for managing experiments)
 tag:
@@ -17,3 +17,6 @@ out_dir: "./data"
 ## Songs to be excluded from training.
 exclude_songs: []
 
+### Pyinsy related settings.
+## Sinsy dictionary directory
+sinsy_dic: "../../_common/no2/dic"

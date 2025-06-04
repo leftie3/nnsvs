@@ -71,6 +71,7 @@ if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
     # Step 1:
     # Generate full-context labels from musicxml
 
-    # Will likely create a custom version of this script
-    python $NO2_ROOT/utils/musicxml2lab.py ./config.yaml
+    # Creating a custom version of this script
+    # python $NO2_ROOT/utils/musicxml2lab.py ./config.yaml
+    python $NNSVS_ROOT/recipes/_common/db/gtsinger/data_prep.py ./config.yaml
 fi
