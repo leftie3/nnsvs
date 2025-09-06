@@ -1,16 +1,19 @@
 """Data preparation for GTSinger database."""
 
-import cutlet
+import os
 import sys
 import unicodedata
 from glob import glob
 from os.path import expanduser, join
-from shutil import rmtree, copytree
 from pathlib import Path
+from shutil import copytree, rmtree
 
+import cutlet
 import pysinsy
 import yaml
+from nnmnkwii.io import hts
 from tqdm import tqdm
+from util import merge_sil
 
 
 def create_temp_db(temp_db_root, songs, config):
@@ -65,8 +68,27 @@ def main():
     for song in tqdm(temp_songs):
         files = sorted(glob(join(song, "*.*xml")))
         for path in files:
-            print(f"asserting {path}")
             assert sinsy.loadScoreFromMusicXML(path)
+            for is_mono in [True, False]:
+                labels = sinsy.createLabelData(is_mono, 1, 1).getData()
+                lab = hts.HTSLabelFile()
+                for label in labels:
+                    lab.append(label.split(), strict=False)
+                lab = merge_sil(lab)
+                dst_dir = join(config["out_dir"], "generated_mono" if is_mono else "generated_full")
+                os.makedirs(dst_dir, exist_ok=True)
+
+                # Write label to file
+                filepath = Path(path)
+                name = "_".join([filepath.parts[-2], filepath.stem])
+                with open(join(dst_dir, name + ".lab"), "w") as file:
+                    file.write(str(lab))
+
+            sinsy.clearScore()
+
+    # Rounding
+    for name in ["generated_mono", "generated_full"]:
+        files = sorted(glob(join(config["out_dir"], name, "*.lab")))
 
     rmtree(temp_db_root)
 
