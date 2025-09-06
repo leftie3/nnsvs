@@ -4,7 +4,7 @@ import os
 import sys
 import unicodedata
 from glob import glob
-from os.path import expanduser, join
+from os.path import basename, expanduser, join
 from pathlib import Path
 from shutil import copytree, rmtree
 
@@ -89,6 +89,19 @@ def main():
     # Rounding
     for name in ["generated_mono", "generated_full"]:
         files = sorted(glob(join(config["out_dir"], name, "*.lab")))
+        dst_dir = join(config["out_dir"], name + "_round")
+        os.makedirs(dst_dir, exist_ok=True)
+
+        for path in tqdm(files):
+            lab = hts.load(path)
+            name = basename(path)
+
+            for i in range(len(lab)):
+                lab.start_times[i] = round(lab.start_times[i] / 50000) * 50000
+                lab.end_times[i] = round(lab.end_times[i] / 50000) * 50000
+
+            with open(join(dst_dir, name), "w") as file:
+                file.write(str(lab))
 
     rmtree(temp_db_root)
 
