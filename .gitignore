@@ -21,6 +21,7 @@ recipes*/*/*/wav*
 recipes*/*/*/outputs
 recipes*/*/*/*.wav
 recipes*/*/*/packed_models
+recipes*/*/*/*.log
 
 # misc
 aup

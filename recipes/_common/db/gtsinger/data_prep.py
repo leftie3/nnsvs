@@ -87,6 +87,7 @@ def main():
             sinsy.clearScore()
 
     # Rounding
+    print("Round label files.")
     for name in ["generated_mono", "generated_full"]:
         files = sorted(glob(join(config["out_dir"], name, "*.lab")))
         dst_dir = join(config["out_dir"], name + "_round")

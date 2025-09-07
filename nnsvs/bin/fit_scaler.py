@@ -9,7 +9,7 @@ from omegaconf import DictConfig, OmegaConf
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 
-@hydra.main(config_path="conf/fit_scaler", config_name="config")
+@hydra.main(config_path="conf/fit_scaler", config_name="config", version_base=None)
 def my_app(config: DictConfig) -> None:
     logger = getLogger(config.verbose)
     logger.info(OmegaConf.to_yaml(config))
